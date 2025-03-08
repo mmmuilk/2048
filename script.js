@@ -131,7 +131,7 @@ document.addEventListener("touchend", function (e) {
   handleSwipe();
 });
 
-//更新移动端
+//更新移动端。。滑
 function handleSwipe() {
   let dx = touchEndX - touchStartX;
   let dy = touchEndY - touchStartY;
