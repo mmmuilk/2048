@@ -3,7 +3,7 @@ const scoreDisplay = document.getElementById('score');
 let grid = [];
 let score = 0;
 
-// Initialize the grid
+//谁家好人写代码不写注释
 function initializeGrid() {
   grid = Array(4)
     .fill()
@@ -13,7 +13,6 @@ function initializeGrid() {
   renderGrid();
 }
 
-// Add a random tile (2 or 4)
 function addRandomTile() {
   let emptyTiles = [];
   for (let row = 0; row < 4; row++) {
@@ -29,7 +28,6 @@ function addRandomTile() {
   }
 }
 
-// Render the grid
 function renderGrid() {
   gameBoard.innerHTML = '';
   for (let row = 0; row < 4; row++) {
@@ -46,7 +44,6 @@ function renderGrid() {
   scoreDisplay.textContent = `Score: ${score}`;
 }
 
-// Slide tiles in a given direction
 function slide(row) {
   let arr = row.filter(val => val);
   let merged = [];
@@ -65,7 +62,6 @@ function slide(row) {
   return merged;
 }
 
-// Handle move
 function move(direction) {
   let rotated = false;
   if (direction === 'up' || direction === 'down') {
@@ -95,7 +91,6 @@ function move(direction) {
   }
 }
 
-// Rotate grid (transpose for vertical moves)
 function rotateGrid(matrix, counterClockwise = false) {
   const rotated = matrix[0].map((_, colIndex) =>
     matrix.map(row => row[colIndex])
@@ -103,7 +98,6 @@ function rotateGrid(matrix, counterClockwise = false) {
   return counterClockwise ? rotated.map(row => row.reverse()) : rotated.reverse();
 }
 
-// Check game over
 function checkGameOver() {
   for (let row = 0; row < 4; row++) {
     for (let col = 0; col < 4; col++) {
@@ -115,13 +109,49 @@ function checkGameOver() {
   return true;
 }
 
-// Handle key press
 document.addEventListener('keydown', e => {
   if (e.key === 'ArrowUp') move('up');
   if (e.key === 'ArrowDown') move('down');
   if (e.key === 'ArrowLeft') move('left');
   if (e.key === 'ArrowRight') move('right');
 });
+let touchStartX = 0;
+let touchStartY = 0;
+let touchEndX = 0;
+let touchEndY = 0;
+
+document.addEventListener("touchstart", function (e) {
+  touchStartX = e.touches[0].clientX;
+  touchStartY = e.touches[0].clientY;
+});
+
+document.addEventListener("touchend", function (e) {
+  touchEndX = e.changedTouches[0].clientX;
+  touchEndY = e.changedTouches[0].clientY;
+  handleSwipe();
+});
+
+//更新移动端
+function handleSwipe() {
+  let dx = touchEndX - touchStartX;
+  let dy = touchEndY - touchStartY;
+
+  if (Math.abs(dx) > Math.abs(dy)) {
+    // 左右滑动
+    if (dx > 50) {
+      move("right");
+    } else if (dx < -50) {
+      move("left");
+    }
+  } else {
+    // 上下滑动
+    if (dy > 50) {
+      move("down");
+    } else if (dy < -50) {
+      move("up");
+    }
+  }
+}
 
 // Initialize the game
 initializeGrid();
